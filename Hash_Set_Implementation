@@ -1,0 +1,68 @@
+Implement a Hash Set 
+hash function: the goal of the hash function is to assign an address to store a given value. Ideally, each unique value should have an unique hash value.
+
+collision handling: since the nature of a hash function is to map a value from a space A into a corresponding value in a smaller space B, it could happen that multiple values from space A might be mapped to the same value in space B. 
+This is what we call collision. Therefore, it is indispensable for us to have a strategy to handle the collision.
+Separate Chaining: for values with the same hash key, we keep them in a bucket, and each bucket is independent from each other.
+In this article, we focus on the strategy of separate chaining. Here is how it works overall.
+Essentially, the primary storage underneath a HashSet is a continuous memory as Array. Each element in this array corresponds to a bucket that stores the actual values.
+Given a value, first we generate a key for the value via the hash function. The generated key serves as the index to locate the bucket.
+Once the bucket is located, we then perform the desired operations on the bucket, such as add, remove and contains.
+class MyHashSet:
+
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.key_range = 769
+        self.bucket_array = []
+        for i in range(self.key_range):
+            # to create predefined buckets
+            self.bucket_array.append([])
+            
+    
+    def hash_function(self, key:int) -> int:
+        bucket_index = key % self.key_range
+        return bucket_index
+        """
+        returns the random bucket where value will be stored
+        """
+        
+    def add(self, key: int) -> None:
+        if not self.contains(key):
+            bucket_index = self.hash_function(key)
+            self.bucket_array[bucket_index].append(key)
+        
+    def remove(self, key: int) -> None:
+        if self.contains(key):
+            bucket_index = self.hash_function(key)
+            len_bucket = len(self.bucket_array[bucket_index])
+            for i in range(len_bucket):
+                bucket_array_item = self.bucket_array[bucket_index][i]
+                if bucket_array_item == key:
+                    del self.bucket_array[bucket_index][i]
+                    return None
+                
+    def contains(self, key: int) -> bool:
+        bucket_index = self.hash_function(key)
+        len_bucket = len(self.bucket_array[bucket_index])
+        for i in range(len_bucket):
+            bucket_array_item = self.bucket_array[bucket_index][i]
+            if bucket_array_item == key:
+                return True
+        return False
+        
+        
+        
+        """
+        Returns true if this set contains the specified element
+        """
+        
+# Time Complexity O(n/k)
+# Space Complexity O(n+k)
+
+# Your MyHashSet object will be instantiated and called as such:
+# obj = MyHashSet()
+# obj.add(key)
+# obj.remove(key)
+# param_3 = obj.contains(key)
