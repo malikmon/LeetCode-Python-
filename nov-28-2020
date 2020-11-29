@@ -56,3 +56,27 @@ class Solution:
 # # Time Complexity O(n*2n)
 # # Space Complexity O(n*2n)
 # Video Prakash Shukla
+
+
+********************************
+90. Subsets II
+class Solution:
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        result = []
+        # to get duplicates in an order
+        nums.sort()
+        def backtrack(current, index):
+            result.append(list(current))
+            for i in range(index, len(nums)):
+                # check if next num is same as previous then skip the backtrack call and i > 0
+                if (i > index and nums[i] == nums[i-1]):
+                    continue
+                current.append(nums[i])
+                backtrack(current, i+1)
+                current.pop()
+        backtrack([],0)
+        return result
+    
+    #Time Complexity O(n*2^n)
+    #Space Complexity O(n*2^n) 
+    # Video Prakash Shukla
